@@ -1,0 +1,54 @@
+<form method="post">
+    <hr>
+    <p>Edit employee information below. Please enter the employee code to edit.</p>
+
+    <label for="editCodeUser">Employee Code</label>
+    <input name="editCodeUser" type="text" id="editCodeUser">
+    <button type="submit">Find Employee</button>
+</form>
+
+<?php
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["editCodeUser"])) {
+    $editCode = $_POST["editCodeUser"];
+    $employeeToEdit = findAnEmployeeByCode($financeDepartments, $editCode);
+
+    if ($employeeToEdit) {
+        ?>
+        <form method="post">
+            <input type="hidden" name="editCode" value="<?= $editCode; ?>">
+            <label for="editFullName">Full name</label>
+            <input name="editFullName" type="text" id="editFullName" value="<?= $employeeToEdit['fullName']; ?>">
+            <br>
+            <label for="editPosition">Position</label>
+            <input name="editPosition" type="text" id="editPosition" value="<?= $employeeToEdit['position']; ?>">
+            <br>
+            <label for="editSalary">Salary</label>
+            <input name="editSalary" type="text" id="editSalary" value="<?= $employeeToEdit['salary']; ?>">
+            <br>
+            <label for="editChildrenAmount">Amount of children</label>
+            <input name="editChildrenAmount" type="text" id="editChildrenAmount" value="<?= $employeeToEdit['childrenAmount']; ?>">
+            <br>
+            <label for="editWorkExperience">Work experience</label>
+            <input name="editWorkExperience" type="text" id="editWorkExperience" value="<?= $employeeToEdit['workExperience']; ?>">
+            <br />
+            <br />
+            <button type="submit">Save Changes</button>
+        </form>
+        <?php
+    } else {
+        $error_message =  "Employee not found with code: $editCode";
+    }
+}
+
+
+function findAnEmployeeByCode($array, $code)
+{
+    foreach ($array as $employee) {
+
+        if (isset($employee['code']) && $employee['code'] == $code) {
+            return $employee;
+        }
+    }
+    return false;
+}
+?>
